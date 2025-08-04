@@ -49,7 +49,7 @@ namespace WeatherApp.Config
                 catch (System.Exception ex)
                 {
                     Debug.LogError($"Failed to load API configuration: {ex.Message}");
-                    _apiKey = "fa141ff82288cb95bd287316d0c15f08";
+                    _apiKey = "your_api_key_here";
                     _isLoaded = true;
                 }
             }
@@ -57,7 +57,7 @@ namespace WeatherApp.Config
             {
                 Debug.LogWarning($"Config file not found at {configPath}. Using placeholder API key.");
                 Debug.LogWarning("Please create a config.json file in StreamingAssets folder with your API key.");
-                _apiKey = "fa141ff82288cb95bd287316d0c15f08";
+                _apiKey = "your_api_key_here";
                 _isLoaded = true;
             }
         }
@@ -68,7 +68,7 @@ namespace WeatherApp.Config
         public static bool IsApiKeyConfigured()
         {
             return !string.IsNullOrEmpty(OpenWeatherMapApiKey) && 
-                   OpenWeatherMapApiKey != "fa141ff82288cb95bd287316d0c15f08";
+                   OpenWeatherMapApiKey != "your_api_key_here";
         }
     }
     
