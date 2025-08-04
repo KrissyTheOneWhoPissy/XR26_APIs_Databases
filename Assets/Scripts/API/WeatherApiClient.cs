@@ -43,8 +43,7 @@ namespace WeatherApp.Services
             // The url now consists of firstly the base url to OpenWeatherMap's api
             // We also have a specific city but by using ?q= and UnityWebRequest.EscapeUrl we should be able to get city names such as "New York"
             // We get the appid to retrieve the api key from the config.json
-            // Lastly we request the units to be retrived in metric
-            string url = $"{baseUrl}?q={UnityWebRequest.EscapeURL(city)}&appid={ApiConfig.OpenWeatherMapApiKey}&units=metric";
+            string url = $"{baseUrl}?q={UnityWebRequest.EscapeURL(city)}&appid={ApiConfig.OpenWeatherMapApiKey}";
 
 
             // (Done?) TODO: Create UnityWebRequest and use modern async pattern
