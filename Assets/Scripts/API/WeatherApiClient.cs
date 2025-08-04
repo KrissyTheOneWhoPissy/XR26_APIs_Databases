@@ -38,26 +38,72 @@ namespace WeatherApp.Services
                 Debug.LogError("API key not configured. Please set up your config.json file in StreamingAssets folder.");
                 return null;
             }
-            
-            // TODO: Build the complete URL with city and API key
-            string url = $"";
-            
-            // TODO: Create UnityWebRequest and use modern async pattern
+
+            // (Done) TODO: Build the complete URL with city and API key
+            // The url now consists of firstly the base url to OpenWeatherMap's api
+            // We also have a specific city but by using ?q= and UnityWebRequest.EscapeUrl we should be able to get city names such as "New York"
+            // We get the appid to retrieve the api key from the config.json
+            // Lastly we request the units to be retrived in metric
+            string url = $"{baseUrl}?q={UnityWebRequest.EscapeURL(city)}&appid={ApiConfig.OpenWeatherMapApiKey}&units=metric";
+
+
+            // (Done?) TODO: Create UnityWebRequest and use modern async pattern
             using (UnityWebRequest request = UnityWebRequest.Get(url))
             {
-                // TODO: Use async/await, send the request and wait for response
-                
-                // TODO: Implement proper error handling for different result types
+                // (Done) TODO: Use async/await, send the request and wait for response 
+                await request.SendWebRequest();
+
+                // (Done) TODO: Implement proper error handling for different result types
                 // Check request.result for Success, ConnectionError, ProtocolError, DataProcessingError
                 
-                // TODO: Parse JSON response using Newtonsoft.Json
-                
-                // TODO: Return the parsed WeatherData object
-                
-                return null; // Placeholder - students will replace this
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.Success:
+                        return ParseWeatherData(request.downloadHandler.text);
+
+                    case UnityWebRequest.Result.ConnectionError:
+                        Debug.LogError($"Network connection error: {request.error}");
+                        break;
+
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError($"HTTP error {request.responseCode}: {request.error}");
+                        break;
+
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError($"Data processing error: {request.error}");
+                        break;
+
+                    default:
+                        Debug.LogError("Unknown error occurred");
+                        break;
+                }
+
+                return null;
+
             }
         }
-        
+                // (Done)TODO: Parse JSON response using Newtonsoft.Json
+                // (Done)TODO: Return the parsed WeatherData object
+        private WeatherData ParseWeatherData(string jsonString)
+        {
+            try
+            {
+                var settings = new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
+                return JsonConvert.DeserializeObject<WeatherData>(jsonString, settings);
+            }
+            catch (JsonException ex)
+            {
+                Debug.LogError($"JSON parsing failed: {ex.Message}");
+                return null;
+            }
+        }
+
+
         /// <summary>
         /// Example usage method - students can use this as reference
         /// </summary>
