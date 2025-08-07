@@ -8,14 +8,17 @@ namespace Databases
     public class HighScore
     {
         // TODO: Students will add the correct SQLite attributes
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         
         // TODO: Add [Indexed] attribute for frequently queried fields
+        [Indexed]
         public string PlayerName { get; set; }
         
         public int Score { get; set; }
         
         // TODO: Add [Indexed] attribute here too
+        [Indexed]
         public string LevelName { get; set; }
         
         public DateTime AchievedAt { get; set; }
